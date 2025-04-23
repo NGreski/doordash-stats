@@ -9,12 +9,18 @@ function App() {
   const [text2, setText2] = useState('');
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState(null);
+  const [debugTimes, setDebugTimes] = useState(null);
 
   const handleImageUpload = (e, setImage) => {
     const file = e.target.files[0];
     if (file) {
       setImage(URL.createObjectURL(file));
     }
+  };
+
+  const extractTimeString = (str) => {
+    const match = str.match(/(\d{1,2}:\d{2})\s?(AM|PM)?/i);
+    return match ? match[0] : '';
   };
 
   const handleOCR = async () => {
@@ -32,6 +38,9 @@ function App() {
     setText1(rawText1);
     setText2(rawText2);
 
+    const lines1 = rawText1.split('\n').map(line => line.trim()).filter(Boolean);
+    const lines2 = rawText2.split('\n').map(line => line.trim()).filter(Boolean);
+
     const parsed1 = parseFirstScreenshot(rawText1);
     const parsed2 = parseSecondScreenshot(rawText2);
 
@@ -39,11 +48,26 @@ function App() {
       const actualTime = (parsed2.topTime - parsed1.topTime) / 60000;
       const expectedTime = (parsed1.deliverBy - parsed1.topTime) / 60000;
 
+      const time1 = parsed1.deliverBy;
+      const time2 = parsed2.topTime;
+      const time3 = parsed1.topTime;
+
+      const x = (time1 - time3) / 60000;
+      const y = (time2 - time3) / 60000;
+
       setStats({
         money: parsed1.amount,
         actualTime: actualTime.toFixed(1),
         expectedTime: expectedTime.toFixed(1),
         miles: parsed1.miles
+      });
+
+      setDebugTimes({
+        deliverBy: time1?.toLocaleTimeString(),
+        actualDelivered: extractTimeString(lines2[0]),
+        original: extractTimeString(lines1[0]),
+        x: x.toFixed(1),
+        y: y.toFixed(1)
       });
     }
 
@@ -109,6 +133,17 @@ function App() {
           <p><strong>Actual Delivery Time:</strong> {stats.actualTime} minutes</p>
           <p><strong>Expected Delivery Time:</strong> {stats.expectedTime} minutes</p>
           <p><strong>Miles:</strong> {stats.miles} mi</p>
+        </div>
+      )}
+
+      {debugTimes && (
+        <div className="output">
+          <h2>Debug Times</h2>
+          <p><strong>Deliver By:</strong> {debugTimes.deliverBy}</p>
+          <p><strong>Actual Delivered Time (Clean):</strong> {debugTimes.actualDelivered}</p>
+          <p><strong>Original Time (Clean):</strong> {debugTimes.original}</p>
+          <p><strong>X (DeliverBy - Original):</strong> {debugTimes.x} minutes</p>
+          <p><strong>Y (ActualDelivered - Original):</strong> {debugTimes.y} minutes</p>
         </div>
       )}
 
