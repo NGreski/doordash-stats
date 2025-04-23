@@ -97,8 +97,8 @@ function App() {
   const parseFirstScreenshot = (text) => {
     const lines = text.split('\n').map(line => line.trim()).filter(Boolean);
 
-    const milesLine = lines[8] || '';
-    const milesMatch = milesLine.match(/(\d+(\.\d+)?)\s*mi/i);
+    const milesLine = lines.find(line => /mi\b/i.test(line)) || '';
+    const milesMatch = milesLine.match(/(\d+(\.\d+)?)\s*mi\b/i);
     const miles = milesMatch ? parseFloat(milesMatch[1]) : null;
 
     const amountMatch = text.match(/\$([\d\.]+)/);
