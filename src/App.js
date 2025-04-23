@@ -57,9 +57,12 @@ function App() {
 
     if (parsed1 && parsed2) {
 
-      let time1 = extractMinutes(lines1[9]);
-      let time2 = extractMinutes(lines2[0]);
-      let time3 = extractMinutes(lines1[0]);
+      // let time1 = extractMinutes(lines1[9]);
+      // let time2 = extractMinutes(lines2[0]);
+      // let time3 = extractMinutes(lines1[0]);
+
+      let { time1, time3 } = parsed1;
+      let { time2 } = parsed2;
 
       let x = (time1 - time3);
       let y = (time2 - time3);
@@ -97,19 +100,31 @@ function App() {
   const parseFirstScreenshot = (text) => {
     const lines = text.split('\n').map(line => line.trim()).filter(Boolean);
 
+    //miles
     const milesLine = lines.find(line => /mi\b/i.test(line)) || '';
     const milesMatch = milesLine.match(/(\d+(\.\d+)?)\s*mi\b/i);
     const miles = milesMatch ? parseFloat(milesMatch[1]) : null;
-
+    
+    //amount
     const amountMatch = text.match(/\$([\d\.]+)/);
     const amount = amountMatch ? parseFloat(amountMatch[1]) : null;
 
-    return {miles, amount};
+    //times
+    const timeStrings = lines.filter(line => /(\d{1,2}:\d{2})\s?(AM|PM)?/i.test(line));
+    const time1 = timeStrings.length > 1 ? extractMinutes(timeStrings[1]) : null;
+    const time3 = timeStrings.length > 0 ? extractMinutes(timeStrings[0]) : null;
+
+    return {miles, amount, time1, time3};
   };
 
   const parseSecondScreenshot = (text) => {
+    
+    //time
     const lines = text.split('\n').map(line => line.trim()).filter(Boolean);
-    return {};
+    const timeStrings = lines.filter(line => /(\d{1,2}:\d{2})\s?(AM|PM)?/i.test(line));
+    const time2 = timeStrings.length > 0 ? extractMinutes(timeStrings[0]) : null;
+
+    return { time2 };
   };
 
   return (
