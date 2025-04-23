@@ -20,7 +20,7 @@ function App() {
 
   const extractTimeString = (str) => {
     const match = str.match(/(\d{1,2}:\d{2})\s?(AM|PM)?/i);
-    return match ? match[0] : '';
+    return match ? match[1] : '';
   };
 
   const handleOCR = async () => {
@@ -63,7 +63,8 @@ function App() {
       });
 
       setDebugTimes({
-        deliverBy: time1?.toLocaleTimeString(),
+        deliverBy: extractTimeString(lines1[9]),
+        //deliverBy: time1?.toLocaleTimeString(),
         actualDelivered: extractTimeString(lines2[0]),
         original: extractTimeString(lines1[0]),
         x: x.toFixed(1),
