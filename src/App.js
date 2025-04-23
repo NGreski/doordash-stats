@@ -20,19 +20,18 @@ function App() {
 
   const extractTimeString = (str) => {
     const match = str.match(/(\d{1,2}:\d{2})\s?(AM|PM)?/i);
-    return match ? match[1] : ''; // Return the time in HH:MM format
+    return match ? match[1] : ''; 
   };
   
   const extractMinutes = (timeString) => {
-    // Using extractTimeString to get the time part (HH:MM)
     const time = extractTimeString(timeString);
     
     if (time) {
-      // Get the part after the colon and convert it to an integer
-      const minutes = time.split(':')[1]; // Get the minutes part as a string
-      return parseInt(minutes, 10); // Convert to integer
+  
+      const minutes = time.split(':')[1];
+      return parseInt(minutes, 10); 
     }
-    return null; // Return null if the time string can't be parsed
+    return null; 
   };
   
   const handleOCR = async () => {
@@ -57,18 +56,21 @@ function App() {
     const parsed2 = parseSecondScreenshot(rawText2);
 
     if (parsed1 && parsed2) {
-      // const actualTime = (parsed2.topTime - parsed1.topTime) / 60000;
-      // const expectedTime = (parsed1.deliverBy - parsed1.topTime) / 60000;
 
-      // const time1 = parsed1.deliverBy;
-      // const time2 = parsed2.topTime;
-      // const time3 = parsed1.topTime;
+      let time1 = extractMinutes(lines1[9]);
+      let time2 = extractMinutes(lines2[0]);
+      let time3 = extractMinutes(lines1[0]);
 
-      // const x = (time1 - time3) / 60000;
-      // const y = (time2 - time3) / 60000;
+      let x = (time1 - time3);
+      let y = (time2 - time3);
 
-      const x = (extractMinutes(lines1[9]) - extractMinutes(lines1[0]));
-      const y = (extractMinutes(lines2[0]) - extractMinutes(lines1[0]));
+      if (x < 0){
+        x = ((time1 + 60) - time3)
+      }
+
+      if(y < 0){
+        y = ((time2 + 60) - time3)
+      }
 
       setStats({
         money: parsed1.amount,
