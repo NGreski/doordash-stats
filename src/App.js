@@ -20,9 +20,21 @@ function App() {
 
   const extractTimeString = (str) => {
     const match = str.match(/(\d{1,2}:\d{2})\s?(AM|PM)?/i);
-    return match ? match[1] : '';
+    return match ? match[1] : ''; // Return the time in HH:MM format
   };
-
+  
+  const extractMinutes = (timeString) => {
+    // Using extractTimeString to get the time part (HH:MM)
+    const time = extractTimeString(timeString);
+    
+    if (time) {
+      // Get the part after the colon and convert it to an integer
+      const minutes = time.split(':')[1]; // Get the minutes part as a string
+      return parseInt(minutes, 10); // Convert to integer
+    }
+    return null; // Return null if the time string can't be parsed
+  };
+  
   const handleOCR = async () => {
     if (!image1 || !image2) return;
     setLoading(true);
@@ -64,11 +76,13 @@ function App() {
 
       setDebugTimes({
         deliverBy: extractTimeString(lines1[9]),
-        //deliverBy: time1?.toLocaleTimeString(),
         actualDelivered: extractTimeString(lines2[0]),
         original: extractTimeString(lines1[0]),
         x: x.toFixed(1),
-        y: y.toFixed(1)
+        y: y.toFixed(1),
+        deliverByMinutes: extractMinutes(lines1[9]),
+        actualDeliveredMinutes: extractMinutes(lines2[0]),
+        originalMinutes: extractMinutes(lines1[0])
       });
     }
 
@@ -145,6 +159,9 @@ function App() {
           <p><strong>Original Time (Clean):</strong> {debugTimes.original}</p>
           <p><strong>X (DeliverBy - Original):</strong> {debugTimes.x} minutes</p>
           <p><strong>Y (ActualDelivered - Original):</strong> {debugTimes.y} minutes</p>
+          <p><strong>Deliver By (Minutes):</strong> {debugTimes.deliverByMinutes}</p>
+          <p><strong>Actual Delivered (Minutes):</strong> {debugTimes.actualDeliveredMinutes}</p>
+          <p><strong>Original (Minutes):</strong> {debugTimes.originalMinutes}</p>
         </div>
       )}
 
