@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Tesseract from 'tesseract.js';
 import './App.css';
+import { db } from './firebase';
+import { collection, addDoc, Timestamp } from 'firebase/firestore';
 
 function App() {
   const [image1, setImage1] = useState(null);
@@ -77,6 +79,15 @@ function App() {
         expectedTime: x,
         actualTime: y,
         miles: parsed1.miles
+      });
+
+      //firebase
+      await addDoc(collection(db, 'deliveries'), {
+        money: parsed1.amount,
+        expectedTime: x,
+        actualTime: y,
+        miles: parsed1.miles,
+        timestamp: Timestamp.now()
       });
 
       //printing to page for debugging
