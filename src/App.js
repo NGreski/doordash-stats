@@ -57,20 +57,23 @@ function App() {
     const parsed2 = parseSecondScreenshot(rawText2);
 
     if (parsed1 && parsed2) {
-      const actualTime = (parsed2.topTime - parsed1.topTime) / 60000;
-      const expectedTime = (parsed1.deliverBy - parsed1.topTime) / 60000;
+      // const actualTime = (parsed2.topTime - parsed1.topTime) / 60000;
+      // const expectedTime = (parsed1.deliverBy - parsed1.topTime) / 60000;
 
-      const time1 = parsed1.deliverBy;
-      const time2 = parsed2.topTime;
-      const time3 = parsed1.topTime;
+      // const time1 = parsed1.deliverBy;
+      // const time2 = parsed2.topTime;
+      // const time3 = parsed1.topTime;
 
-      const x = (time1 - time3) / 60000;
-      const y = (time2 - time3) / 60000;
+      // const x = (time1 - time3) / 60000;
+      // const y = (time2 - time3) / 60000;
+
+      const x = (extractMinutes(lines1[9]) - extractMinutes(lines1[0]));
+      const y = (extractMinutes(lines2[0]) - extractMinutes(lines1[0]));
 
       setStats({
         money: parsed1.amount,
-        actualTime: actualTime.toFixed(1),
-        expectedTime: expectedTime.toFixed(1),
+        actualTime: x,
+        expectedTime: y,
         miles: parsed1.miles
       });
 
@@ -78,8 +81,8 @@ function App() {
         deliverBy: extractTimeString(lines1[9]),
         actualDelivered: extractTimeString(lines2[0]),
         original: extractTimeString(lines1[0]),
-        x: x.toFixed(1),
-        y: y.toFixed(1),
+        x: x,
+        y: y,
         deliverByMinutes: extractMinutes(lines1[9]),
         actualDeliveredMinutes: extractMinutes(lines2[0]),
         originalMinutes: extractMinutes(lines1[0])
