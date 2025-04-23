@@ -24,6 +24,22 @@ const StatsDashboard = () => {
     avgActual: avg(data.map(d => d.actualTime)),
   };
 
+  //new stats
+  const totalMoney = data.reduce((sum, d) => sum + d.money, 0);
+  const totalMiles = data.reduce((sum, d) => sum + d.miles, 0);
+  const totalActualTime = data.reduce((sum, d) => sum + d.actualTime, 0);
+  const totalExpectedTime = data.reduce((sum, d) => sum + d.expectedTime, 0);
+
+  const dollarsPerHour = totalActualTime > 0 ? ((totalMoney / totalActualTime) * 60).toFixed(2) : 0;
+  const timeDiffs = data.map(d => d.expectedTime - d.actualTime);
+  const avgTimeDiff = timeDiffs.length ? (timeDiffs.reduce((a, b) => a + b, 0) / timeDiffs.length).toFixed(2) : 0;
+
+  const costPerMile = 0.65; // or whatever you're estimating for gas/expenses
+  const totalCost = totalMiles * costPerMile;
+  const totalProfit = (totalMoney - totalCost).toFixed(2);
+
+  //end new stats
+
   const enrichedData = data.map((d, i) => ({
     ...d,
     index: i + 1,
@@ -38,11 +54,17 @@ const StatsDashboard = () => {
       {/* Section 1: Averages Summary */}
       <div className="bg-white shadow-xl rounded-2xl p-6">
         <h2 className="text-2xl font-semibold mb-4">Average Summary</h2>
-        <ul className="list-disc pl-5">
+        {/* <ul className="list-disc pl-5">
           <li>Average Money Earned: ${averageStats.avgMoney}</li>
           <li>Average Miles: {averageStats.avgMiles} mi</li>
           <li>Average Expected Time: {averageStats.avgExpected} mins</li>
           <li>Average Actual Time: {averageStats.avgActual} mins</li>
+        </ul> */}
+        <ul className="list-disc pl-5">
+          <li>Dollars per Hour: ${dollarsPerHour}</li>
+          <li>Total Miles: {totalMiles.toFixed(2)} mi</li>
+          <li>Total Profit (after ${costPerMile}/mi): ${totalProfit}</li>
+          <li>Avg Time Difference (Expected - Actual): {avgTimeDiff} mins</li>
         </ul>
       </div>
 
