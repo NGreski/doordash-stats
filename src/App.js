@@ -49,6 +49,7 @@ function App() {
     setText1(rawText1);
     setText2(rawText2);
 
+    //not needed leaving for debugging for now
     const lines1 = rawText1.split('\n').map(line => line.trim()).filter(Boolean);
     const lines2 = rawText2.split('\n').map(line => line.trim()).filter(Boolean);
 
@@ -56,10 +57,6 @@ function App() {
     const parsed2 = parseSecondScreenshot(rawText2);
 
     if (parsed1 && parsed2) {
-
-      // let time1 = extractMinutes(lines1[9]);
-      // let time2 = extractMinutes(lines2[0]);
-      // let time3 = extractMinutes(lines1[0]);
 
       let { time1, time3 } = parsed1;
       let { time2 } = parsed2;
@@ -77,11 +74,12 @@ function App() {
 
       setStats({
         money: parsed1.amount,
-        actualTime: x,
-        expectedTime: y,
+        expectedTime: x,
+        actualTime: y,
         miles: parsed1.miles
       });
 
+      //printing to page for debugging
       setDebugTimes({
         deliverBy: extractTimeString(lines1[9]),
         actualDelivered: extractTimeString(lines2[0]),
@@ -145,12 +143,13 @@ function App() {
         <div className="output">
           <h2>Delivery Stats</h2>
           <p><strong>Money Earned:</strong> ${stats.money}</p>
-          <p><strong>Actual Delivery Time:</strong> {stats.actualTime} minutes</p>
           <p><strong>Expected Delivery Time:</strong> {stats.expectedTime} minutes</p>
+          <p><strong>Actual Delivery Time:</strong> {stats.actualTime} minutes</p>
           <p><strong>Miles:</strong> {stats.miles} mi</p>
         </div>
       )}
 
+      {/* Printing for DEBUGGING ONLY */}
       {debugTimes && (
         <div className="output">
           <h2>Debug Times</h2>
