@@ -94,25 +94,8 @@ function App() {
     setLoading(false);
   };
 
-  const parseTime = (str) => {
-    const match = str.match(/(\d{1,2}):(\d{2})\s?(AM|PM)/i);
-    if (!match) return null;
-    let [_, h, m, period] = match;
-    h = parseInt(h);
-    m = parseInt(m);
-    if (period.toUpperCase() === 'PM' && h !== 12) h += 12;
-    if (period.toUpperCase() === 'AM' && h === 12) h = 0;
-    const date = new Date();
-    date.setHours(h, m, 0, 0);
-    return date;
-  };
-
   const parseFirstScreenshot = (text) => {
     const lines = text.split('\n').map(line => line.trim()).filter(Boolean);
-
-    const topTime = parseTime(lines[0]);
-    const deliverBy = lines.find(line => /deliver by/i.test(line));
-    const deliverByTime = deliverBy ? parseTime(deliverBy) : null;
 
     const milesLine = lines[8] || '';
     const milesMatch = milesLine.match(/(\d+(\.\d+)?)\s*mi/i);
@@ -121,15 +104,12 @@ function App() {
     const amountMatch = text.match(/\$([\d\.]+)/);
     const amount = amountMatch ? parseFloat(amountMatch[1]) : null;
 
-    const bottomTime = parseTime(lines[9]);
-
-    return { topTime, deliverBy: deliverByTime, miles, amount, bottomTime };
+    return {miles, amount};
   };
 
   const parseSecondScreenshot = (text) => {
     const lines = text.split('\n').map(line => line.trim()).filter(Boolean);
-    const topTime = parseTime(lines[0]);
-    return { topTime };
+    return {};
   };
 
   return (
