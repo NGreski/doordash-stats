@@ -3,6 +3,8 @@ import Tesseract from 'tesseract.js';
 import './App.css';
 import { db } from './firebase';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
+import 'bootstrap/dist/css/bootstrap.min.css'
+
 
 function App() {
   const [image1, setImage1] = useState(null);
@@ -137,21 +139,21 @@ function App() {
   };
 
   return (
-    <div className="container">
-      <h1>Dasher OCR Tracker</h1>
+    <div className="container py-5">
+      <h1 className="text-center mb-4">Dasher OCR Tracker</h1>
 
       <p><strong>Step 1:</strong> Upload screenshot before accepting</p>
-      <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, setImage1)} />
+      <input className="form-control mb-3" type="file" accept="image/*" onChange={(e) => handleImageUpload(e, setImage1)} />
 
       <p><strong>Step 2:</strong> Upload screenshot after completing</p>
-      <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, setImage2)} />
+      <input className="form-control mb-4" type="file" accept="image/*" onChange={(e) => handleImageUpload(e, setImage2)} />
 
-      <button onClick={handleOCR} disabled={loading}>
+      <button className="btn btn-primary w-100 mb-4" onClick={handleOCR} disabled={loading}>
         {loading ? 'Processing...' : 'Get Stats'}
       </button>
 
       {stats && (
-        <div className="output">
+        <div className="card p-4 mb-4 shadow-sm">
           <h2>Delivery Stats</h2>
           <p><strong>Money Earned:</strong> ${stats.money}</p>
           <p><strong>Expected Delivery Time:</strong> {stats.expectedTime} minutes</p>

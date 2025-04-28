@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import OCRPage from './OCRPage';
 import StatsDashboard from './StatsDashboard';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 function App() {
   return (
