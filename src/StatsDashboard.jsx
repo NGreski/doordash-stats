@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { db } from './firebase';
 import { collection, getDocs } from 'firebase/firestore';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { ScatterChart, Scatter } from 'recharts';
 
 const StatsDashboard = () => {
   const [data, setData] = useState([]);
@@ -24,7 +25,7 @@ const StatsDashboard = () => {
     avgActual: avg(data.map(d => d.actualTime)),
   };
 
-  //new stats
+  // new stats
   const totalMoney = data.reduce((sum, d) => sum + d.money, 0);
   const totalMiles = data.reduce((sum, d) => sum + d.miles, 0);
   const totalActualTime = data.reduce((sum, d) => sum + d.actualTime, 0);
@@ -34,11 +35,11 @@ const StatsDashboard = () => {
   const timeDiffs = data.map(d => d.expectedTime - d.actualTime);
   const avgTimeDiff = timeDiffs.length ? (timeDiffs.reduce((a, b) => a + b, 0) / timeDiffs.length).toFixed(2) : 0;
 
-  const costPerMile = 0.65; // or whatever you're estimating for gas/expenses
+  const costPerMile = 0.30; // or whatever you're estimating for gas/expenses
   const totalCost = totalMiles * costPerMile;
   const totalProfit = (totalMoney - totalCost).toFixed(2);
-
-  //end new stats
+  const totalProfitNoCosts = totalMoney.toFixed(2);
+  // end new stats
 
   const enrichedData = data.map((d, i) => ({
     ...d,
@@ -47,6 +48,45 @@ const StatsDashboard = () => {
     speed: d.miles / d.actualTime
   }));
 
+  // rolling average of dollars/hour
+  // const enrichedWithDollarsPerHour = enrichedData.map((d) => ({
+  //   ...d,
+  //   dollarsPerHour: d.actualTime > 0 ? (d.money / d.actualTime) * 60 : 0,
+  // }));
+
+  // const rollingWindowSize = 5;
+  // const rollingData = enrichedWithDollarsPerHour.map((d, i, arr) => {
+  //   const window = arr.slice(Math.max(0, i - rollingWindowSize + 1), i + 1);
+  //   const avgDollarsPerHour = window.reduce((sum, w) => sum + w.dollarsPerHour, 0) / window.length;
+  //   return {
+  //     ...d,
+  //     rollingDollarsPerHour: avgDollarsPerHour.toFixed(2),
+  //   };
+  // });
+
+  const rollingWindowSize = 5;
+  const rollingData = enrichedData.map((_, i, arr) => {
+    if (i < rollingWindowSize - 1) return null;
+    const window = arr.slice(i - rollingWindowSize + 1, i + 1);
+    const totalMoney = window.reduce((sum, d) => sum + d.money, 0);
+    const totalMinutes = window.reduce((sum, d) => sum + d.actualTime, 0);
+    const dollarsPerHour = totalMinutes > 0 ? (totalMoney / totalMinutes) * 60 : 0;
+    return {
+      index: i + 1,
+      rollingDollarsPerHour: dollarsPerHour.toFixed(2),
+    };
+  }).filter(Boolean);
+
+  const enrichedData1 = data.map((d, i) => ({
+    ...d,
+    index: i + 1,
+    efficiency: d.money / d.actualTime,
+    speed: d.miles / d.actualTime,
+    moneyPerMile: d.miles > 0 ? d.money / d.miles : 0,
+  }));
+
+  
+
   return (
     <div className="p-6 space-y-8">
       <h1 className="text-3xl font-bold">Delivery Stats Dashboard</h1>
@@ -54,15 +94,10 @@ const StatsDashboard = () => {
       {/* Section 1: Averages Summary */}
       <div className="bg-white shadow-xl rounded-2xl p-6">
         <h2 className="text-2xl font-semibold mb-4">Average Summary</h2>
-        {/* <ul className="list-disc pl-5">
-          <li>Average Money Earned: ${averageStats.avgMoney}</li>
-          <li>Average Miles: {averageStats.avgMiles} mi</li>
-          <li>Average Expected Time: {averageStats.avgExpected} mins</li>
-          <li>Average Actual Time: {averageStats.avgActual} mins</li>
-        </ul> */}
         <ul className="list-disc pl-5">
           <li>Dollars per Hour: ${dollarsPerHour}</li>
           <li>Total Miles: {totalMiles.toFixed(2)} mi</li>
+          <li>Total Profit (no costs): ${totalProfitNoCosts}</li>
           <li>Total Profit (after ${costPerMile}/mi): ${totalProfit}</li>
           <li>Avg Time Difference (Expected - Actual): {avgTimeDiff} mins</li>
         </ul>
@@ -84,18 +119,33 @@ const StatsDashboard = () => {
         </ResponsiveContainer>
       </div>
 
-      {/* Section 3: Efficiency Chart */}
+      {/* Section 3: Rolling Average Dollars Per Hour */}
       <div className="bg-white shadow-xl rounded-2xl p-6">
-        <h2 className="text-2xl font-semibold mb-4">Delivery Efficiency (Money per Minute)</h2>
+        <h2 className="text-2xl font-semibold mb-4">Rolling Average ($/Hour)</h2>
         <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={enrichedData}>
+          <LineChart data={rollingData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="index" />
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="efficiency" fill="#ff7300" name="$/Minute" />
-          </BarChart>
+            <Line type="monotone" dataKey="rollingDollarsPerHour" stroke="#ff7300" name="Rolling $/Hour" />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Section 4: Money Per Mile by Delivery */}
+      <div className="bg-white shadow-xl rounded-2xl p-6">
+        <h2 className="text-2xl font-semibold mb-4">Money Earned per Mile</h2>
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart data={enrichedData1}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="index" />
+            <YAxis domain={[0, 'dataMax + 1']} />
+            <Tooltip formatter={(value) => `$${value.toFixed(2)} per mile`} />
+            <Legend />
+            <Line type="monotone" dataKey="moneyPerMile" stroke="#82ca9d" name="$ per Mile" />
+          </LineChart>
         </ResponsiveContainer>
       </div>
     </div>
