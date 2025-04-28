@@ -162,7 +162,8 @@ function App() {
         </div>
       )}
 
-      {/* Printing for DEBUGGING ONLY */}
+      {/*
+      {/* Printing for DEBUGGING ONLY *
       {debugTimes && (
         <div className="output">
           <h2>Debug Times</h2>
@@ -184,7 +185,12 @@ function App() {
           <pre>{text2}</pre>
         </div>
       )}
+
+    */}
+    
     </div>
+
+    
   );
 }
 
