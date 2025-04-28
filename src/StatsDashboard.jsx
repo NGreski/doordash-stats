@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { db } from './firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { ScatterChart, Scatter } from 'recharts';
+
 
 const StatsDashboard = () => {
   const [data, setData] = useState([]);
@@ -16,26 +16,17 @@ const StatsDashboard = () => {
     fetchData();
   }, []);
 
-  const avg = (arr) => (arr.length ? (arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(2) : 0);
-
-  const averageStats = {
-    avgMoney: avg(data.map(d => d.money)),
-    avgMiles: avg(data.map(d => d.miles)),
-    avgExpected: avg(data.map(d => d.expectedTime)),
-    avgActual: avg(data.map(d => d.actualTime)),
-  };
 
   // new stats
   const totalMoney = data.reduce((sum, d) => sum + d.money, 0);
   const totalMiles = data.reduce((sum, d) => sum + d.miles, 0);
   const totalActualTime = data.reduce((sum, d) => sum + d.actualTime, 0);
-  const totalExpectedTime = data.reduce((sum, d) => sum + d.expectedTime, 0);
 
   const dollarsPerHour = totalActualTime > 0 ? ((totalMoney / totalActualTime) * 60).toFixed(2) : 0;
   const timeDiffs = data.map(d => d.expectedTime - d.actualTime);
   const avgTimeDiff = timeDiffs.length ? (timeDiffs.reduce((a, b) => a + b, 0) / timeDiffs.length).toFixed(2) : 0;
 
-  const costPerMile = 0.30; // or whatever you're estimating for gas/expenses
+  const costPerMile = 0.30; // 1.00-.70
   const totalCost = totalMiles * costPerMile;
   const totalProfit = (totalMoney - totalCost).toFixed(2);
   const totalProfitNoCosts = totalMoney.toFixed(2);
