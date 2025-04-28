@@ -48,22 +48,6 @@ const StatsDashboard = () => {
     speed: d.miles / d.actualTime
   }));
 
-  // rolling average of dollars/hour
-  // const enrichedWithDollarsPerHour = enrichedData.map((d) => ({
-  //   ...d,
-  //   dollarsPerHour: d.actualTime > 0 ? (d.money / d.actualTime) * 60 : 0,
-  // }));
-
-  // const rollingWindowSize = 5;
-  // const rollingData = enrichedWithDollarsPerHour.map((d, i, arr) => {
-  //   const window = arr.slice(Math.max(0, i - rollingWindowSize + 1), i + 1);
-  //   const avgDollarsPerHour = window.reduce((sum, w) => sum + w.dollarsPerHour, 0) / window.length;
-  //   return {
-  //     ...d,
-  //     rollingDollarsPerHour: avgDollarsPerHour.toFixed(2),
-  //   };
-  // });
-
   const rollingWindowSize = 5;
   const rollingData = enrichedData.map((_, i, arr) => {
     if (i < rollingWindowSize - 1) return null;
@@ -85,8 +69,6 @@ const StatsDashboard = () => {
     moneyPerMile: d.miles > 0 ? d.money / d.miles : 0,
   }));
 
-  
-
   return (
     <div className="p-6 space-y-8">
       <h1 className="text-3xl font-bold">Delivery Stats Dashboard</h1>
@@ -94,6 +76,7 @@ const StatsDashboard = () => {
       {/* Section 1: Averages Summary */}
       <div className="bg-white shadow-xl rounded-2xl p-6">
         <h2 className="text-2xl font-semibold mb-4">Average Summary</h2>
+        <p className="text-sm mb-4">This section provides a summary of average statistics across all your deliveries. It includes key metrics such as your average money earned per hour, average miles driven, and expected vs actual delivery times.</p>
         <ul className="list-disc pl-5">
           <li>Dollars per Hour: ${dollarsPerHour}</li>
           <li>Total Miles: {totalMiles.toFixed(2)} mi</li>
@@ -106,7 +89,8 @@ const StatsDashboard = () => {
       {/* Section 2: Time Comparison Chart */}
       <div className="bg-white shadow-xl rounded-2xl p-6">
         <h2 className="text-2xl font-semibold mb-4">Expected vs Actual Delivery Times</h2>
-        <ResponsiveContainer width="100%" height={300}>
+        <p className="text-sm mb-4">This chart compares the expected delivery time versus the actual time it took for each delivery. A positive difference indicates that the delivery took longer than expected, while a negative value shows that the delivery was quicker than expected.</p>
+        <ResponsiveContainer width="100%" height={400}> {/* Increased height here */}
           <LineChart data={enrichedData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="index" />
@@ -122,11 +106,12 @@ const StatsDashboard = () => {
       {/* Section 3: Rolling Average Dollars Per Hour */}
       <div className="bg-white shadow-xl rounded-2xl p-6">
         <h2 className="text-2xl font-semibold mb-4">Rolling Average ($/Hour)</h2>
-        <ResponsiveContainer width="100%" height={300}>
+        <p className="text-sm mb-4">This chart shows the rolling average of your earnings per hour over the last 5 deliveries. It helps you track any changes in your earnings over time, giving you a better sense of your performance trend.</p>
+        <ResponsiveContainer width="100%" height={400}> {/* Increased height here */}
           <LineChart data={rollingData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="index" />
-            <YAxis />
+            <YAxis domain={['auto',35]} /> {/* Set max limit of 50 */}
             <Tooltip />
             <Legend />
             <Line type="monotone" dataKey="rollingDollarsPerHour" stroke="#ff7300" name="Rolling $/Hour" />
@@ -137,11 +122,12 @@ const StatsDashboard = () => {
       {/* Section 4: Money Per Mile by Delivery */}
       <div className="bg-white shadow-xl rounded-2xl p-6">
         <h2 className="text-2xl font-semibold mb-4">Money Earned per Mile</h2>
-        <ResponsiveContainer width="100%" height={300}>
+        <p className="text-sm mb-4">This chart displays how much money you earned per mile for each delivery. Tracking this stat can help you understand how efficient your deliveries are in terms of distance traveled versus money earned.</p>
+        <ResponsiveContainer width="100%" height={400}> {/* Increased height here */}
           <LineChart data={enrichedData1}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="index" />
-            <YAxis domain={[0, 'dataMax + 1']} />
+            <YAxis domain={[0, 8]} />
             <Tooltip formatter={(value) => `$${value.toFixed(2)} per mile`} />
             <Legend />
             <Line type="monotone" dataKey="moneyPerMile" stroke="#82ca9d" name="$ per Mile" />
