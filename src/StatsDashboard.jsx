@@ -39,7 +39,7 @@ const StatsDashboard = () => {
     speed: d.miles / d.actualTime
   }));
 
-  const rollingWindowSize = 5;
+  const rollingWindowSize = 6;
   const rollingData = enrichedData.map((_, i, arr) => {
     if (i < rollingWindowSize - 1) return null;
     const window = arr.slice(i - rollingWindowSize + 1, i + 1);
@@ -102,7 +102,7 @@ const StatsDashboard = () => {
           <LineChart data={rollingData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="index" />
-            <YAxis domain={['auto',35]} /> {/* Set max limit of 50 */}
+            <YAxis domain={['auto', 30]} /> {/* Set max limit of 50 */}
             <Tooltip />
             <Legend />
             <Line type="monotone" dataKey="rollingDollarsPerHour" stroke="#ff7300" name="Rolling $/Hour" />
