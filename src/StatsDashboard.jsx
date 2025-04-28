@@ -65,24 +65,39 @@ const StatsDashboard = () => {
       <h1 className="h2 fw-bold mb-4">Delivery Stats Dashboard</h1>
 
       {/* Section 1: Averages Summary */}
-      <div className="card shadow mb-4">
-        <div className="card-body">
-          <h2 className="h4 fw-semibold mb-3">Average Summary</h2>
+      <div className="card shadow mb-4 bg-light">
+        <div className="card-body text-dark">
+          <h2 className="h4 fw-bold text-danger mb-4">Average Summary</h2>
           <p className="text-muted mb-3 small">This section provides a summary of average statistics across all your deliveries. It includes key metrics such as your average money earned per hour, average miles driven, and expected vs actual delivery times.</p>
           <ul className="list-unstyled ps-3">
-            <li>Dollars per Hour: ${dollarsPerHour}</li>
-            <li>Total Miles: {totalMiles.toFixed(2)} mi</li>
-            <li>Total Profit (no costs): ${totalProfitNoCosts}</li>
-            <li>Total Profit (after ${costPerMile}/mi): ${totalProfit}</li>
-            <li>Avg Time Difference (Expected - Actual): {avgTimeDiff} mins</li>
+            <li className="d-flex justify-content-between mb-2">
+              <span className="fw-semibold">Dollars per Hour:</span>
+              <span className="text-success">${dollarsPerHour}</span>
+            </li>
+            <li className="d-flex justify-content-between mb-2">
+              <span className="fw-semibold">Total Miles:</span>
+              <span>{totalMiles.toFixed(2)} mi</span>
+            </li>
+            <li className="d-flex justify-content-between mb-2">
+              <span className="fw-semibold">Total Profit (no costs):</span>
+              <span className="text-danger">${totalProfitNoCosts}</span>
+            </li>
+            <li className="d-flex justify-content-between mb-2">
+              <span className="fw-semibold">Total Profit (after ${costPerMile}/mi):</span>
+              <span className="text-danger">${totalProfit}</span>
+            </li>
+            <li className="d-flex justify-content-between mb-2">
+              <span className="fw-semibold">Avg Time Difference (Expected - Actual):</span>
+              <span>{avgTimeDiff} mins</span>
+            </li>
           </ul>
         </div>
       </div>
 
       {/* Section 2: Time Comparison Chart */}
-      <div className="card shadow mb-4">
-        <div className="card-body">
-          <h2 className="h4 fw-semibold mb-3">Expected vs Actual Delivery Times</h2>
+      <div className="card shadow mb-4 bg-light">
+  <div className="card-body text-dark">
+          <h2 className="h4 fw-bold text-danger mb-4">Expected vs Actual Delivery Times</h2>
           <p className="text-muted mb-3 small">This chart compares the expected delivery time versus the actual time it took for each delivery. A positive difference indicates that the delivery took longer than expected, while a negative value shows that the delivery was quicker than expected.</p>
           <ResponsiveContainer width="100%" height={400}> {/* Increased height here */}
             <LineChart data={enrichedData}>
@@ -99,9 +114,9 @@ const StatsDashboard = () => {
       </div>
 
       {/* Section 3: Rolling Average Dollars Per Hour */}
-      <div className="card shadow mb-4">
-        <div className="card-body">
-          <h2 className="h4 fw-semibold mb-3">Rolling Average ($/Hour)</h2>
+      <div className="card shadow mb-4 bg-light">
+  <div className="card-body text-dark">
+          <h2 className="h4 fw-bold text-danger mb-4">Rolling Average ($/Hour)</h2>
           <p className="text-muted mb-3 small">This chart shows the rolling average of your earnings per hour over the last 5 deliveries. It helps you track any changes in your earnings over time, giving you a better sense of your performance trend.</p>
           <ResponsiveContainer width="100%" height={400}> {/* Increased height here */}
             <LineChart data={rollingData}>
@@ -117,9 +132,9 @@ const StatsDashboard = () => {
       </div>
 
       {/* Section 4: Money Per Mile by Delivery */}
-      <div className="card shadow mb-4">
-          <div className="card-body">
-          <h2 className="h4 fw-semibold mb-3">Money Earned per Mile</h2>
+      <div className="card shadow mb-4 bg-light">
+      <div className="card-body text-dark">
+          <h2 className="h4 fw-bold text-danger mb-4">Money Earned per Mile</h2>
           <p className="text-muted mb-3 small">This chart displays how much money you earned per mile for each delivery. Tracking this stat can help you understand how efficient your deliveries are in terms of distance traveled versus money earned.</p>
           <ResponsiveContainer width="100%" height={400}> {/* Increased height here */}
             <LineChart data={enrichedData1}>

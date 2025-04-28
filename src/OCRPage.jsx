@@ -148,8 +148,8 @@ function App() {
       <p><strong>Step 2:</strong> Upload screenshot after completing</p>
       <input className="form-control mb-4" type="file" accept="image/*" onChange={(e) => handleImageUpload(e, setImage2)} />
 
-      <button className="btn btn-primary w-100 mb-4" onClick={handleOCR} disabled={loading}>
-        {loading ? 'Processing...' : 'Get Stats'}
+      <button className="btn btn-danger w-100 mb-4" onClick={handleOCR} disabled={loading}>
+      {loading ? 'Processing...' : 'Get Stats'}
       </button>
 
       {stats && (
