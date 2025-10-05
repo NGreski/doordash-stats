@@ -1,72 +1,119 @@
-# Getting Started with Create React App
+# 🚗 Dasher Stats
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Author:** Noah Greski  
+**Date:** April 2024  
+Independent Learning Assignment – *Software Engineering II*
 
-## Available Scripts
+Dasher Stats is a web application that helps DoorDash delivery drivers (“dashers”) track their delivery stats, analyze performance, and maximize profits.  
+The application extracts data from screenshots of DoorDash orders and visualizes earnings, delivery times, and mileage to give drivers useful insights.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 🌐 Live Demo
+- **Web App (Firebase Hosted):** [https://doordash-stats.web.app/](https://doordash-stats.web.app/)  
+- **GitHub Repository:** [https://github.com/NGreski/doordash-stats.git](https://github.com/NGreski/doordash-stats.git)  
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🎥 Presentations & Demos
+- **Project Presentation (Video):** [YouTube](https://youtu.be/5GxrGfca3iU)  
+- **Slides:** [Google Slides](https://docs.google.com/presentation/d/1m7Xg__KqIE54JUHW514aN789HwEMYKGsPpyKZrBTraM/edit?usp=sharing)  
+- **Web App Walkthrough Demo:** [YouTube](https://youtu.be/-Uno6HoR1ww)  
+- **How to Use in Real Life (Demo):** [YouTube](https://youtu.be/pOFE8OGLAjU)  
+- **Technical Demo:** [YouTube](https://youtu.be/6OcyNtA1tyg)  
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 📖 Overview
 
-### `npm run build`
+Dasher Stats works as an extension of the official Dasher App. While the official app shows only limited stats, Dasher Stats provides deeper insights such as:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Dollars per hour  
+- Miles driven  
+- Total profit (with and without cost deduction)  
+- Expected vs. actual delivery times  
+- Rolling averages of pay rates  
+- Money earned per mile  
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### How It Works
+1. Take **two screenshots**:
+   - Before accepting an order (shows time, miles, pay, and delivery-by time).
+   - After completing the order (shows time).
+2. Upload these screenshots into the web app.  
+3. The app extracts values using **OCR (Tesseract.js)**.  
+4. Stats are saved in **Firebase Firestore**.  
+5. Visualizations are created with **Recharts** and displayed in the dashboard.  
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## 🛠️ Tech Stack
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- **Frontend:** [React](https://react.dev/)  
+- **OCR:** [Tesseract.js](https://github.com/naptha/tesseract.js)  
+- **Database & Hosting:** [Firebase Firestore](https://firebase.google.com/docs/firestore) + Firebase Hosting  
+- **Analytics:** Firebase Analytics  
+- **Styling:** [Bootstrap](https://getbootstrap.com/)  
+- **Charts & Graphs:** [Recharts](https://recharts.org/)  
+- **Version Control:** GitHub  
+- **Editor:** Visual Studio Code  
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 📊 Features
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **Delivery Data Storage** – Collects pay, mileage, and times.  
+- **Dashboard Summaries** – See totals and averages (earnings, miles, hours).  
+- **Expected vs. Actual Time Chart** – Visualize delivery speed performance.  
+- **Rolling Average Earnings** – Track trends over multiple deliveries.  
+- **Money per Mile Analysis** – Identify profitable vs. unprofitable deliveries.  
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🚧 Limitations
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. **Tips Not Tracked** – Tips often appear after delivery and aren’t included.  
+2. **Manual Screenshots** – Requires two screenshots per delivery.  
+3. **OCR Accuracy** – Dependent on screenshot clarity.  
+4. **Screen-Dependent** – If DoorDash changes layout, updates are needed.  
+5. **No Real-Time Sync** – Cannot connect directly to DoorDash account.  
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 🔮 Future Work
 
-### Analyzing the Bundle Size
+- Add **location data** to identify profitable areas.  
+- Include **tip tracking** for complete earnings insight.  
+- Connect **directly to DoorDash API** (if accessible).  
+- Build a **mobile app** for easier screenshot uploads.  
+- Expand to **other delivery apps** (Uber Eats, Grubhub, etc.).  
+- Add **AI-based recommendations & alerts** for drivers.  
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+## 📈 Results & Insights
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Using Dasher Stats, drivers can answer questions like:
+- Do longer drives make more money?  
+- How much am I really making per hour?  
+- Am I delivering faster than expected?  
 
-### Advanced Configuration
+This project was inspired in part by data analysis done by **Tyler Greene**, who found:
+- More miles generally → slightly more money.  
+- Longer delivery times generally → slightly less money.  
+- Most drivers tend to earn around the same hourly rate overall.  
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Dasher Stats makes it much easier to collect this type of data for future experiments.
 
-### Deployment
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 🙏 Acknowledgments
 
-### `npm run build` fails to minify
+- **Tyler Greene** – Data analysis inspiration.  
+- **Luke Tkaczyk** – Introduced me to DoorDash.  
+- **Dr. Cotler & Professor Chaudhari** – Academic guidance.  
+- **DoorDash** – For the platform and data source.  
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
 
-# doordash
+## 📜 License
+This project is for educational and personal use. No affiliation with DoorDash.  
