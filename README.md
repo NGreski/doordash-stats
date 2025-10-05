@@ -1,7 +1,7 @@
 # 🚗 Dasher Stats
 
 **Author:** Noah Greski  
-**Date:** April 2024  
+**Date:** April 2025  
 Independent Learning Assignment – *Software Engineering II*
 
 Dasher Stats is a web application that helps DoorDash delivery drivers (“dashers”) track their delivery stats, analyze performance, and maximize profits.  
